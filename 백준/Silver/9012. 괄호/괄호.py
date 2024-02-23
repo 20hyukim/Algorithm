@@ -1,21 +1,22 @@
-def vps(s):
-    left = []
-    for i in s:
-        if i=='(':
-            left.append(1)
-        else:
-            if len(left)==0:
-                return "NO"
-            else:
-                left.pop()
-        #print(left)
-    if len(left)!=0:
-        return "NO"
-    return "YES"
+def vps(paren):
+    stack = []
+    for p in paren:
+        if p =='(':
+            stack.append(1)
+            continue
+        if not stack:
+            return 'NO'
+        stack.pop()
+
+    if stack:
+        return 'NO'
+    return 'YES'
 
 
-n = int(input())
+def main():
+    for i in range(int(input())):
+        print(vps(input()))
 
-for i in range(n):
-    str = input()
-    print(vps(str))
+
+if __name__ == "__main__":
+    main()
