@@ -1,21 +1,10 @@
 len_city = int(input())
 d = list(map(int, input().split()))
 city = list(map(int, input().split()))
-
-city_w_index = [[money, city_num] for city_num, money in enumerate(city)]
-#print(city_w_index)
-city_w_index.sort()
-#print(city_w_index)
-
-visited = [False]*(len_city+1)
+visited_city = []
 total = 0
-
-for m, c in city_w_index:
-    if visited[c]:
-        continue
-    for i in range (c+1, len(city), 1):
-        if not visited[i]:
-            total += d[i-1] * m
-            visited[i] = True
+for i in range(0, len_city-1, 1):
+    visited_city.append(city[i])
+    total += d[i] * min(visited_city)
 
 print(total)
