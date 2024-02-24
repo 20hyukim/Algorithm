@@ -22,4 +22,6 @@ trees = list(map(int, input().split()))
 trees.sort(reverse=True)
 
 height = trees[0]
-print(cal(trees, height))
+minus = m//len(trees)
+print(cal(trees, height-minus))
+
