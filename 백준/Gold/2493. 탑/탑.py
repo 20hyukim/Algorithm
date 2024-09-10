@@ -20,15 +20,6 @@ def laser(n):
     return hit
 
 
-def strize(hit):
-    str_hit = []
-    for h in hit:
-        str_hit.append(str(h))
-
-    return str_hit
-
-
 if __name__ == "__main__":
     hit = laser(int(input()))
-    str_hit = strize(hit)
-    print(" ".join(str_hit))
+    print(" ".join(map(str, hit)))
