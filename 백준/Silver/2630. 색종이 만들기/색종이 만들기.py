@@ -1,29 +1,47 @@
-def origami(square):
-    global white
+blue = 0
+white = 0
+
+
+def make_origami(n):
+    origami = []
+    for i in range(n):
+        ori = list(map(int, input().split()))
+        origami.append(ori)
+
+    return n, origami
+
+
+def count_blue_white(left, right, up, down, origami, n):
     global blue
-    l = len(square)
-    total = sum(sum(row) for row in square)
-    if total == l ** 2:
+    global white
+
+    summed = 0
+
+    for i in range(up, down, 1):
+        for j in range(left, right, 1):
+            summed += origami[i][j]
+
+    if summed == n**2:
         blue += 1
         return
-    if total == 0:
+
+    elif summed == 0:
         white += 1
         return
-    origami([row[:l // 2] for row in square[:l // 2]])
-    origami([row[l // 2:] for row in square[:l // 2]])
-    origami([row[:l // 2] for row in square[l // 2:]])
-    origami([row[l // 2:] for row in square[l // 2:]])
 
-    return (white, blue)
+    else:
+        width_mid = int((left + right)/2)
+        height_mid = int((up + down)/2)
+        n = int(n/2)
+
+        count_blue_white(left, width_mid, up, height_mid, origami, n)
+        count_blue_white(width_mid, right, up, height_mid, origami, n)
+        count_blue_white(left, width_mid, height_mid, down, origami, n)
+        count_blue_white(width_mid, right, height_mid, down, origami, n)
 
 
-white = 0
-blue = 0
-nums = []
-for i in range(int(input())):
-    lines = list(map(int, input().split()))
-    nums.append(lines)
-
-origami(nums)
-print(white)
-print(blue)
+if __name__ == "__main__":
+    n, origami = make_origami(int(input()))
+    count_blue_white(0, n, 0, n, origami, n)
+    print(white)
+    print(blue)
