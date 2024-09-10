@@ -7,24 +7,36 @@ def get_animal_location(n):
     return animals
 
 
-def find_animal_in_range(l, r, xs):
-    for x in xs:
-        if l <= x <= r:
+def find_animal_in_range(l, r, xs, m):
+    left = 0
+    right = m-1
+
+    while left <= right:
+        mid = (left + right) //2
+        if l <= xs[mid] <= r:
             return 1
 
+        elif l > xs[mid]:
+            left = mid + 1
+
+        else:
+            right = mid - 1
+
     return 0
-def find_animals_in_range(l, n, animals, xs):
+
+
+def find_animals_in_range(l, n, animals, xs, m):
     for animal in animals:
         d = l - animal[1]
         animal[1] = d
 
     #print(animals)
-
+    xs.sort()
     total = 0
     for x, d in animals:
         if d < 0:
             continue
-        total += find_animal_in_range(x-d, x+d, xs)
+        total += find_animal_in_range(x-d, x+d, xs, m)
 
     return total
 
@@ -34,4 +46,4 @@ if __name__ == "__main__":
     xs = list(map(int, input().split()))
     animals = get_animal_location(n)
     #print("animals:", animals)
-    print(find_animals_in_range(l, n, animals, xs))
+    print(find_animals_in_range(l, n, animals, xs, m))
