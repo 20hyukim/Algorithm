@@ -1,64 +1,30 @@
-class Node:
-    def __init__(self, root):
-        self.root = root
-        self.left = None
-        self.right = None
-
-
-
-def get_nodes():
-    root_num = int(input())
-    root_node = Node(root_num)
-
+import sys
+sys.setrecursionlimit(10**9)
+input = sys.stdin.readline
+def get_pre():
     while True:
         try:
-            new_node = Node(int(input()))
-            cur_node = root_node
+            pre.append(int(input()))
 
-            while True:
-                if new_node.root < cur_node.root:
-                    if cur_node.left is None:
-                        cur_node.left = new_node
-                        break
-                    else:
-                        cur_node = cur_node.left
-
-                else:
-                    if cur_node.right is None:
-                        cur_node.right = new_node
-                        break
-                    else:
-                        cur_node = cur_node.right
         except:
-            return root_node
+            break
 
 
-def postorder(root_node):
-    stack = []
-    cur_node = root_node
+def print_post(start, end):
+    if start > end:
+        return
+    mid = end + 1 # 오른쪽 sub tree 가 없을 때를 대비한, 설정
+    for i in range(start+1, end+1):
+        if pre[start] < pre[i]:
+            mid = i
+            break
 
-    while root_node:
-        if cur_node.left:
-            stack.append(cur_node)
-            cur_node = cur_node.left
-            continue
-        elif cur_node.right:
-            stack.append(cur_node)
-            cur_node = cur_node.right
-            continue
-        else:
-            print(cur_node.root)
-            if stack:
-                last_visit = stack.pop()
-                if last_visit.left == cur_node:
-                    last_visit.left = None
-                else:
-                    last_visit.right = None
-                cur_node = last_visit
-            else:
-                break
+    print_post(start+1, mid-1)
+    print_post(mid, end)
+    print(pre[start])
 
 
 if __name__ == "__main__":
-    root_node = get_nodes()
-    postorder(root_node)
+    pre = []
+    get_pre()
+    print_post(0, len(pre) - 1)
