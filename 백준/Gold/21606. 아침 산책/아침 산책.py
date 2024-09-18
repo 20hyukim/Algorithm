@@ -30,6 +30,12 @@ class Graph:
         self.visited = [False] * self.n
 
     def count_path(self):
+        if sum(self.inout) == 0 or sum(self.inout) == 1:
+            return 0
+
+        if sum(self.inout) == 2:
+            return 2
+
         #print(self.v_list)
         for i in range(self.n):
             #print("i", i)
