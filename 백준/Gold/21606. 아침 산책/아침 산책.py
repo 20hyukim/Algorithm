@@ -29,12 +29,29 @@ class Graph:
     def reset_visited(self):
         self.visited = [False] * self.n
 
+    def in_line(self):
+        for i in range(1, self.n-1, 1):
+            if self.v_list[i] != [i-1, i+1]:
+                return False
+
+        if self.v_list[0] != [1]:
+            return False
+
+        if self.v_list[self.n - 1] != [self.n - 2]:
+            return False
+
+        return True
+
     def count_path(self):
         if sum(self.inout) == 0 or sum(self.inout) == 1:
             return 0
 
         if sum(self.inout) == 2:
             return 2
+
+        if self.in_line():
+            return (sum(self.inout) - 1) * 2
+
 
         #print(self.v_list)
         for i in range(self.n):
