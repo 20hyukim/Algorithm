@@ -1,7 +1,5 @@
 from collections import defaultdict
-import sys
 
-sys.setrecursionlimit(10**6)
 class Graph:
     def __init__(self, n, inout):
         self.n = n
@@ -18,7 +16,7 @@ class Graph:
 
     def find_path(self, i, start, path):
 
-        if i != start and self.inout[i]:
+        if i != start and inout[i]:
             #print(path)
             self.cnt += 1
             return
@@ -78,3 +76,6 @@ if __name__ == "__main__":
 
 
     print(g.count_path())
+
+
+
