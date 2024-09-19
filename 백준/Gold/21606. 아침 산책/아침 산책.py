@@ -1,80 +1,54 @@
 from collections import defaultdict
+import math
+import sys
+sys.setrecursionlimit(10**6)
 
 class Graph:
-    def __init__(self, n, inout):
-        self.n = n
-        self.inout = inout
+    def __init__(self, vertex, location):
+        self.vertex = vertex
+        self.location = [-1] + location
         self.v_list = defaultdict(list)
-        self.visited = [False] * n
-        self.cnt = 0
+        self.v_list_location = defaultdict(list)
+        self.paths = 0
+        self.black_cnt = 0
+        self.visited = [False] * (self.vertex + 1)
 
-
-    def get_edges(self, u, v):
+    def add_edges(self):
+        u, v = map(int, input().split())
         self.v_list[u].append(v)
         self.v_list[v].append(u)
+        self.v_list_location[u].append(self.location[v])
+        self.v_list_location[v].append(self.location[u])
 
 
-    def find_path(self, i, start, path):
-
-        if i != start and self.inout[i]:
-            #print(path)
-            self.cnt += 1
-            return
-
-        for v in self.v_list[i]:
-            if not self.visited[v]:
-                self.visited[v] = True
-                self.find_path(v, start, path + [v])
-                self.visited[v] = False
-    def reset_visited(self):
-        self.visited = [False] * self.n
-
-    def in_line(self):
-        for i in range(1, self.n-1, 1):
-            if self.v_list[i] != [i-1, i+1]:
-                return False
-
-        if self.v_list[0] != [1]:
-            return False
-
-        if self.v_list[self.n - 1] != [self.n - 2]:
-            return False
-
-        return True
-
-    def count_path(self):
-        if sum(self.inout) == 0 or sum(self.inout) == 1:
-            return 0
-
-        if sum(self.inout) == 2:
-            return 2
-
-        if self.in_line():
-            return (sum(self.inout) - 1) * 2
-
-
+    def dfs(self, i):
+        self.visited[i] = True
+        for near_v in self.v_list[i]:
+            if self.location[near_v]:
+                self.black_cnt += 1
+            elif not self.visited[near_v]:
+                self.dfs(near_v)
+    def get_path(self):
         #print(self.v_list)
-        for i in range(self.n):
-            #print("i", i)
-            if self.inout[i]:
-                self.visited[i] = True
-                self.find_path(i, i, [i])
+        #print(self.location)
 
-            self.reset_visited()
+        for i in range(1, self.vertex+1, 1):
+            #print(self.paths)
+            if self.location[i]:
+                self.paths += sum(self.v_list_location[i])
+            elif not self.visited[i]:
+                self.black_cnt = 0
+                self.dfs(i)
+                self.paths += math.comb(self.black_cnt, 2) * 2
 
-        return self.cnt
+        return self.paths
+
 
 
 if __name__ == "__main__":
-    n = int(input())
-    inout = list(map(int, input()))
-    #print(inout)
-    g = Graph(n, inout)
-    for _ in range(n-1):
-        u, v = map(int, input().split())
-        g.get_edges(u-1, v-1)
-
-
-    print(g.count_path())
-
-   
+    vertex = int(input())
+    location = list(map(int, input()))
+    g = Graph(vertex, location)
+    for i in range( vertex - 1 ):
+        g.add_edges()
+    print(g.get_path())
