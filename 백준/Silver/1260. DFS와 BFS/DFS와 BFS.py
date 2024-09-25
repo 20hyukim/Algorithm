@@ -1,52 +1,46 @@
-from collections import defaultdict
+from collections import deque
 
 
-def bfs(start):
-    queue = [start]
-    answer = []
-    visited = [False] * (n + 1)
-    while queue and len(answer) != n:
-        i = queue.pop(0)
-        visited[i] = True
-        answer.append(i)
+def dfs(node):
+    visited_dfs.add(node)
+    result_dfs.append(node)
 
-        i_list = sorted(dict_n[i])
-        for i_near in i_list:
-            if not visited[i_near] and i_near not in queue:
-                queue.append(i_near)
-
-    return " ".join(map(str, answer))
+    for i in sorted(edges[node]):
+        if i not in visited_dfs:
+            dfs(i)
 
 
-def dfs(cur_index, visited):
-    if len(answer) == n:
-        return
-    visited[cur_index] = True
-    answer.append(cur_index)
-    i_list = sorted(dict_n[cur_index])
+def bfs(node):
+    q = deque([node])
+    visited_bfs.add(node)
+    result_bfs.append(node)
 
-    for i in i_list:
-        if not visited[i]:
-            dfs(i, visited)
+    while q:
+        node = q.popleft()
+        for i in sorted(edges[node]):
+            if i not in visited_bfs:
+                visited_bfs.add(i)
+                result_bfs.append(i)
+                q.append(i)
 
 
 if __name__ == "__main__":
     n, m, start = map(int, input().split())
-    dict_n = defaultdict(list)
-    duplicated = set()
-    for i in range(m):
-        x, y = map(int, input().split())
-        if x > y:
-            x, y = y, x
-        duplicated.add((x, y))
+    edges = [[] for _ in range(n + 1)]
 
-    for x, y in duplicated:
-        dict_n[x].append(y)
-        dict_n[y].append(x)
+    for _ in range(m):
+        u, v = map(int, input().split())
+        edges[u].append(v)
+        edges[v].append(u)
 
-    answer = []
-    visited = [False] * (n + 1)
-    dfs(start, visited)
-    #print(answer)
-    print(" ".join(map(str, answer)))
-    print(bfs(start))
+    # DFS
+    visited_dfs = set()
+    result_dfs = []
+    dfs(start)
+    print(" ".join(map(str, result_dfs)))
+
+    # BFS
+    visited_bfs = set()
+    result_bfs = []
+    bfs(start)
+    print(" ".join(map(str, result_bfs)))
