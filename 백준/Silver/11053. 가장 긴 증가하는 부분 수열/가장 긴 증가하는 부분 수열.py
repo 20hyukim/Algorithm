@@ -1,21 +1,20 @@
-def lis_length(nums):
-    if not nums:
-        return 0
+def longest(n, arr):
+    result = [0] * (n)
+    for i in range(len(arr)):
+        max_v = 1
+        for j in range(i-1, -1, -1):
+            if arr[j] < arr[i]:
+                max_v = max(result[j]+1, max_v)
+            else:
+                continue
 
-    # DP 테이블 초기화
-    dp = [1] * len(nums)  # 각 위치를 끝으로 하는 LIS의 길이를 저장. 최소 길이는 1이므로 1로 초기화.
+        result[i] = max_v
 
-    # 모든 위치에 대해 LIS 계산
-    for i in range(1, len(nums)):
-        for j in range(i):
-            if nums[i] > nums[j]:
-                dp[i] = max(dp[i], dp[j] + 1)
-
-    # DP 테이블에서 최대 값을 찾음
-    return max(dp)
+    #print(result)
+    return max(result)
 
 
-height = int(input())
-# 입력 예시
-nums = list(map(int, input().split()))
-print(lis_length(nums))
+if __name__ == "__main__":
+    n = int(input())
+    arr = list(map(int, input().split()))
+    print(longest(n, arr))
