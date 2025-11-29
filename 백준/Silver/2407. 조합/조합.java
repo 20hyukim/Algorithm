@@ -3,29 +3,31 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigInteger;
 
-import static java.math.BigInteger.ZERO;
-
-// 백준2407번 : 조합
+// 백준 2407번 : 조합
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String[] inp = br.readLine().split(" ");
-        int n = Integer.parseInt(inp[0]);
-        int m = Integer.parseInt(inp[1]);
+        String[] nm = br.readLine().split(" ");
 
-        BigInteger answer = ZERO;
+        int n = Integer.parseInt(nm[0]);
+        int m = Integer.parseInt(nm[1]);
 
-        answer = factorial(n).divide((factorial(n-m).multiply(factorial(m))));
+        BigInteger combination;
 
-        System.out.println(answer);
+        combination = factorial(BigInteger.valueOf(n))
+                .divide(factorial(BigInteger.valueOf(m)));
+
+
+        combination = combination.divide(factorial(BigInteger.valueOf(n-m)));
+
+        System.out.println(combination);
     }
 
-    public static BigInteger factorial(int n){
-        if (n == 1) {
+    private static BigInteger factorial(BigInteger n) {
+        if (n.equals(BigInteger.ONE) || n.equals(BigInteger.ZERO)) {
             return BigInteger.ONE;
         }
 
-        return BigInteger.valueOf(n).multiply(factorial(n-1));
+        return n.multiply(factorial(n.subtract(BigInteger.ONE)));
     }
-
 }
