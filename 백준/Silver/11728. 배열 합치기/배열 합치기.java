@@ -1,42 +1,49 @@
 import java.io.*;
-import java.util.PriorityQueue;
-import java.util.TreeMap;
+import java.util.ArrayList;
+import java.util.List;
 
+// 백준 11728번 : 배열 합치기 - 새로운 풀이
 public class Main {
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        PriorityQueue<Integer> queue = new PriorityQueue<>();
-
         String[] ab = br.readLine().split(" ");
+        int a = Integer.parseInt(ab[0]);
+        int b = Integer.parseInt(ab[1]);
 
-        for(String n: ab) {
-            String[] nums = br.readLine().split(" ");
-            for (int i = 0; i < Integer.parseInt(n); i++) {
-                queue.add(Integer.parseInt(nums[i]));
+        String[] aArr = br.readLine().split(" ");
+        String[] bArr = br.readLine().split(" ");
+
+        int ai = 0;
+        int bi = 0;
+
+        List<String> arr = new ArrayList<>();
+
+        while (ai < a && bi < b) {
+            if (Integer.parseInt(aArr[ai]) <= Integer.parseInt(bArr[bi])) {
+                arr.add(aArr[ai++]);
+            } else {
+                arr.add(bArr[bi++]);
+
             }
-
         }
 
-        while (!queue.isEmpty()) {
-            Integer n = queue.poll();
-            bw.write(n+ " ");
+
+        while (ai < a) {
+            arr.add(aArr[ai++]);
         }
+        while (bi < b) {
+            arr.add(bArr[bi++]);
+        }
+
+        for(int i = 0; i < a+b; i++) {
+            bw.write(arr.get(i)+ " ");
+        }
+
         bw.flush();
         bw.close();
         br.close();
-
     }
 
-//    private static PriorityQueue<String> addNumber(BufferedReader br, int n) throws IOException {
-//        String[] nums = br.readLine().split(" ");
-//
-//        for (int i = 0; i < n; i++) {
-//            System.out.println(nums[i]);
-//            queue.add(String.valueOf(nums[i]));
-//        }
-//        return queue;
-//    }
 }
