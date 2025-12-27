@@ -1,43 +1,53 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.*;
+import java.io.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.List;
 
+// 백준 11725번 : 트리의 부모 찾기
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        HashMap<String, List<String>> graph = new HashMap<>();
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        int cases = Integer.parseInt(br.readLine());
+        int n = Integer.parseInt(br.readLine());
+        int[] parent = new int[n+1];
 
-        for (int i = 0; i < cases - 1; i++) {
-            String[] inp = br.readLine().split(" ");
-            String n1 = inp[0];
-            String n2 = inp[1];
+        List<Integer>[] tree = new ArrayList[n+1];
 
-            graph.computeIfAbsent(n1, k -> new ArrayList<>()).add(n2);
-            graph.computeIfAbsent(n2, k -> new ArrayList<>()).add(n1);
+        for (int i = 1; i < n+1; i++) {
+            tree[i] = new ArrayList<>();
         }
 
-        String[] parents = new String[cases+1];
-        boolean[] visited = new boolean[cases+1];
-        Deque<String> queue = new ArrayDeque<>();
-        queue.addLast("1");
-        visited[1] = true;
-        while(!queue.isEmpty()) {
-            String p = queue.removeFirst();
-            for (String child: graph.get(p)) {
-                if (!visited[Integer.parseInt(child)])  {
-                    parents[Integer.parseInt(child)] = p;
-                    queue.addLast(child);
-                    visited[Integer.parseInt(child)] = true;
-                }
+        for(int i = 0; i < n-1; i++) {
+            String[] inps = br.readLine().split(" ");
+            int n1 = Integer.parseInt(inps[0]);
+            int n2 = Integer.parseInt(inps[1]);
+            tree[n1].add(n2);
+            tree[n2].add(n1);
+        }
+
+        Deque<Integer> queue = new ArrayDeque<>();
+        boolean[] visited = new boolean[n+1];
+        queue.addLast(1);
+
+        while (!queue.isEmpty()) {
+            int p = queue.removeFirst();
+            List<Integer> child = tree[p];
+//            System.out.println(p);
+            for (Integer c : child) {
+                if (visited[c]) continue;
+                parent[c] = p;
+                visited[c] = true;
+                queue.addLast(c);
             }
         }
 
-        for (int i = 2; i < cases + 1; i++) {
-            System.out.println(parents[i]);
+        for (int i = 2; i < n+1; i++) {
+            bw.write(parent[i] + "\n");
         }
-
+        bw.flush();
+        bw.close();
+        br.close();
     }
 }
